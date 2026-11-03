@@ -1,8 +1,9 @@
-import { Portrait } from "@/components/ui/Portrait";
+import { Photo } from "@/components/ui/Photo";
+import { images } from "@/lib/images";
 
-export function About({ portrait }: { portrait?: string }) {
+export function About() {
   return (
-    <section className="about" id="about">
+    <section className="about" id="about" data-reveal>
       <div className="about-copy">
         <h2>My name is Akan Imoh.</h2>
         <p>I travel across Africa to document how its most important business leaders think, build, and lead.</p>
@@ -14,7 +15,14 @@ export function About({ portrait }: { portrait?: string }) {
         <p className="about-close">I don’t just interview leaders. I document how Africa is being built.</p>
       </div>
       <div className="about-media">
-        <Portrait variant="about" src={portrait} />
+        <Photo
+          src={images.portrait.src(1000)}
+          alt={images.portrait.alt}
+          sizes="(max-width: 900px) 100vw, 42vw"
+          ratio="4 / 5"
+          priority
+          label="Akan Imoh"
+        />
       </div>
     </section>
   );

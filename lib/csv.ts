@@ -54,11 +54,16 @@ export function parseCsv(input: string): Record<string, string>[] {
   });
 }
 
+export function cleanText(value: string) {
+  return value.replace(/[\u202A\u202C\u200B\u2060]/g, "").trim();
+}
+
 export function pick(row: Record<string, string>, ...keys: string[]) {
   const entries = Object.entries(row);
   for (const key of keys) {
     const found = entries.find(([name]) => name.toLowerCase() === key.toLowerCase());
-    if (found?.[1].trim()) return found[1].trim();
+    const value = cleanText(found?.[1] ?? "");
+    if (value) return value;
   }
   return "";
 }

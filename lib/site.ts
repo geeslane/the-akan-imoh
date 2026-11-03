@@ -12,16 +12,15 @@ export const site = {
   substackUrl: process.env.NEXT_PUBLIC_SUBSTACK_URL || "https://theakanimoh.substack.com",
   youtubeUrl: process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/@theakanimoh",
   linkedinUrl: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/in/akan-imoh",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://the-akan-imoh.vercel.app",
 };
 
 export const nav = [
   { href: "#about", id: "about", label: "About" },
   { href: "#work", id: "work", label: "Work" },
   { href: "#stories", id: "stories", label: "Stories" },
-  { href: "#archive", id: "archive", label: "Archive" },
   { href: "#writing", id: "writing", label: "Writing" },
-  { href: "#feature", id: "feature", label: "Feature" },
+  { href: "#enquire", id: "feature", label: "Feature" },
 ] as const;
 
 export const practice = [

@@ -4,7 +4,7 @@ export function Newsletter() {
   const subscribe = `${site.substackUrl.replace(/\/$/, "")}/subscribe`;
 
   return (
-    <section className="newsletter" id="letters" aria-labelledby="letters-title">
+    <section className="newsletter" id="letters" aria-labelledby="letters-title" data-reveal>
       <p className="eyebrow">
         <span />
         Letters

@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 import { Overlay } from "@/components/ui/Overlay";
+import { Photo } from "@/components/ui/Photo";
+import { images } from "@/lib/images";
 import type { GalleryItem } from "@/lib/types";
 
 const themes = [
-  { index: "01", title: "Leadership" },
-  { index: "02", title: "Management" },
-  { index: "03", title: "Communication" },
+  { index: "01", title: "Leadership", image: images.gallery.leadership },
+  { index: "02", title: "Management", image: images.gallery.management },
+  { index: "03", title: "Communication", image: images.gallery.communication },
 ];
 
 export function Gallery({ items }: { items: GalleryItem[] }) {
@@ -21,7 +23,7 @@ export function Gallery({ items }: { items: GalleryItem[] }) {
 
   useEffect(() => {
     if (index === null) return;
-    const onKey = (event: KeyboardEvent) => {
+    const onKey = (event: globalThis.KeyboardEvent) => {
       if (event.key === "ArrowRight") {
         setIndex((current) => (current === null ? current : (current + 1) % items.length));
       }
@@ -34,7 +36,7 @@ export function Gallery({ items }: { items: GalleryItem[] }) {
   }, [index, items.length]);
 
   return (
-    <section className="gallery" id="archive">
+    <section className="gallery" id="archive" data-reveal>
       <div className="section-head">
         <div>
           <p className="eyebrow eyebrow-left">
@@ -46,20 +48,33 @@ export function Gallery({ items }: { items: GalleryItem[] }) {
       </div>
 
       {items.length === 0 ? (
-        <div className="plates" aria-label="Archive themes">
-          {themes.map((theme) => (
-            <article key={theme.index}>
-              <span>{theme.index}</span>
-              <h3>{theme.title}</h3>
-            </article>
-          ))}
-        </div>
+        <Carousel label="Archive themes">
+          <div className="plates">
+            {themes.map((theme) => (
+              <article className="plate" key={theme.index}>
+                <Photo
+                  src={theme.image.src(900)}
+                  alt={theme.image.alt}
+                  sizes="(max-width: 767px) 78vw, 33vw"
+                  ratio="3 / 4"
+                  label={theme.title}
+                />
+                <div className="plate-label">
+                  <span>{theme.index}</span>
+                  <h3>{theme.title}</h3>
+                </div>
+              </article>
+            ))}
+          </div>
+        </Carousel>
       ) : (
-        <div className="gallery-grid">
-          {items.map((item, itemIndex) => (
-            <GalleryTile key={item.id} item={item} onOpen={() => setIndex(itemIndex)} />
-          ))}
-        </div>
+        <Carousel label="Gallery">
+          <div className="gallery-grid">
+            {items.map((item, itemIndex) => (
+              <GalleryTile key={item.id} item={item} onOpen={() => setIndex(itemIndex)} />
+            ))}
+          </div>
+        </Carousel>
       )}
 
       {active && index !== null && (
@@ -93,6 +108,45 @@ export function Gallery({ items }: { items: GalleryItem[] }) {
   );
 }
 
+function Carousel({ label, children }: { label: string; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const scrollByCard = (direction: number) => {
+    const node = ref.current?.querySelector<HTMLElement>(".plates, .gallery-grid");
+    if (!node) return;
+    const card = node.querySelector<HTMLElement>("article, .gallery-tile");
+    const amount = (card?.getBoundingClientRect().width ?? node.clientWidth) + 12;
+    node.scrollBy({ left: direction * amount, behavior: "smooth" });
+  };
+
+  const onKey = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      scrollByCard(1);
+    }
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      scrollByCard(-1);
+    }
+  };
+
+  return (
+    <div className="carousel">
+      <div className="carousel-controls">
+        <button type="button" onClick={() => scrollByCard(-1)}>
+          Previous
+        </button>
+        <button type="button" onClick={() => scrollByCard(1)}>
+          Next
+        </button>
+      </div>
+      <div ref={ref} tabIndex={0} aria-label={label} onKeyDown={onKey}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function GalleryTile({ item, onOpen }: { item: GalleryItem; onOpen: () => void }) {
   const [broken, setBroken] = useState(false);
 
@@ -101,7 +155,7 @@ function GalleryTile({ item, onOpen }: { item: GalleryItem; onOpen: () => void }
       {broken ? (
         <span className="gallery-fallback">{item.title}</span>
       ) : (
-        <img src={item.imageUrl} alt="" onError={() => setBroken(true)} />
+        <img src={item.imageUrl} alt="" loading="lazy" decoding="async" onError={() => setBroken(true)} />
       )}
       <span className="gallery-caption">
         {item.category && <span>{item.category}</span>}

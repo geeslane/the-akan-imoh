@@ -1,6 +1,6 @@
 import "server-only";
 
-import { parseCsv, pick, slugify, youtubeIdFrom } from "@/lib/csv";
+import { cleanText, parseCsv, pick, slugify, youtubeIdFrom } from "@/lib/csv";
 import type { GalleryItem, Story } from "@/lib/types";
 
 const SHEET_ID_PATTERN = /^[\w-]{20,}$/;
@@ -70,7 +70,7 @@ export async function getStories(): Promise<Story[]> {
     const stories = await Promise.all(
       drafts.map(async ({ row, index, youtubeId, title }) => {
         const details = title ? null : await youtubeDetails(youtubeId);
-        const resolvedTitle = title || details?.title || "Untitled film";
+        const resolvedTitle = cleanText(title || details?.title || "Untitled film");
         const thumbnail =
           pick(row, "thumbnail", "image", "imageUrl") ||
           `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg`;

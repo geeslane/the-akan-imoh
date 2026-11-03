@@ -2,12 +2,7 @@ import { pillars } from "@/lib/site";
 
 export function Manifesto() {
   return (
-    <section className="manifesto" id="why" aria-labelledby="why-title">
-      <p className="eyebrow">
-        <span />
-        Why This Matters
-        <span />
-      </p>
+    <section className="manifesto" id="why" aria-labelledby="why-title" data-reveal>
       <h2 id="why-title" className="visually-hidden">
         Why this matters
       </h2>

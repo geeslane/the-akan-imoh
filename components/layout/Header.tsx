@@ -37,8 +37,39 @@ export function Header({ showStories = true }: { showStories?: boolean }) {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+
+    const menu = document.getElementById("mobile-menu");
+    const toggle = document.querySelector<HTMLButtonElement>(".nav-toggle");
+    const items = () =>
+      Array.from(menu?.querySelectorAll<HTMLElement>("a[href], button") ?? []);
+
+    items()[0]?.focus();
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggle?.focus();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = items();
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
     };
   }, [open]);
 
@@ -56,7 +87,7 @@ export function Header({ showStories = true }: { showStories?: boolean }) {
         ))}
       </nav>
 
-      <a className="header-cta" href="#feature">
+      <a className="header-cta" href="#enquire">
         Request a Feature
       </a>
 
@@ -71,13 +102,13 @@ export function Header({ showStories = true }: { showStories?: boolean }) {
       </button>
 
       {open && (
-        <div className="menu" id="mobile-menu">
+        <div className="menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu">
           {items.map((item) => (
             <a key={item.id} href={item.href} onClick={() => setOpen(false)}>
               {item.label}
             </a>
           ))}
-          <a href="#feature" onClick={() => setOpen(false)}>
+          <a href="#enquire" onClick={() => setOpen(false)}>
             Request a Feature
           </a>
         </div>

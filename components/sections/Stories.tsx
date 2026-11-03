@@ -14,7 +14,7 @@ export function Stories({ stories }: StoriesProps) {
   const [active, setActive] = useState<Story | null>(null);
 
   return (
-    <section className="stories" id="stories">
+    <section className="stories" id="stories" data-reveal>
       <div className="section-head">
         <div>
           <p className="eyebrow eyebrow-left">
@@ -103,6 +103,8 @@ function StoryTile({ story, onOpen }: { story: Story; onOpen: () => void }) {
           <img
             src={src}
             alt=""
+            loading="lazy"
+            decoding="async"
             onLoad={(event) => {
               if (event.currentTarget.naturalWidth < 200) advance();
             }}

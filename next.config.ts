@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "img.youtube.com" },
       { protocol: "https", hostname: "substackcdn.com" },
       { protocol: "https", hostname: "*.substackcdn.com" },
+      { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
 };

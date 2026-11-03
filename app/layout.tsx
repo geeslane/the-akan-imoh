@@ -1,13 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow_Condensed, Inter } from "next/font/google";
+import { Barlow_Condensed, Cormorant_Garamond, Inter } from "next/font/google";
 import type { ReactNode } from "react";
+import { images } from "@/lib/images";
 import { site } from "@/lib/site";
 import "./globals.css";
 
 const display = Barlow_Condensed({
   subsets: ["latin"],
   weight: ["500", "600"],
+  style: ["normal", "italic"],
   variable: "--font-display",
+  display: "swap",
+});
+
+const quote = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  style: ["italic"],
+  variable: "--font-quote",
   display: "swap",
 });
 
@@ -19,6 +29,8 @@ const sans = Inter({
   display: "swap",
 });
 
+const ogImage = `${images.hero.src(1200)}&h=630`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.siteUrl),
   title: site.title,
@@ -28,6 +40,13 @@ export const metadata: Metadata = {
     description: site.description,
     type: "website",
     locale: "en_GB",
+    images: [{ url: ogImage, width: 1200, height: 630, alt: images.hero.alt }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.title,
+    description: site.description,
+    images: [ogImage],
   },
 };
 
@@ -49,7 +68,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`}>
+    <html lang="en" className={`${display.variable} ${sans.variable} ${quote.variable}`}>
       <head>
         <link rel="preconnect" href="https://www.youtube-nocookie.com" />
         <link rel="preconnect" href="https://www.youtube.com" />

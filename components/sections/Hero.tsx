@@ -1,23 +1,30 @@
 import { PlayIcon } from "@/components/ui/Icons";
-import { Portrait } from "@/components/ui/Portrait";
+import { Photo } from "@/components/ui/Photo";
+import { images } from "@/lib/images";
 import { site } from "@/lib/site";
 
-export function Hero({ portrait, hasStories }: { portrait?: string; hasStories: boolean }) {
+export function Hero({ hasStories }: { hasStories: boolean }) {
   return (
     <section className="hero" id="top" aria-label="Introduction">
+      <div className="hero-bg">
+        <Photo
+          src={images.hero.src(2000)}
+          alt={images.hero.alt}
+          sizes="100vw"
+          priority
+          fillFrame
+          label="Lagos"
+        />
+        <div className="hero-shade" aria-hidden="true" />
+      </div>
       <div className="grain" aria-hidden="true" />
       <div className="hero-copy">
-        <p className="eyebrow rise d1">
-          <span />
-          A Documentary Practice
-          <span />
-        </p>
         <h1 className="rise d2">
-          I Tell the Stories
-          <br />
-          Behind <em>Africa’s</em> Most
-          <br />
-          Powerful Builders.
+          <span>I Tell the Stories</span>
+          <span>
+            Behind <em>Africa’s</em> Most
+          </span>
+          <span>Powerful Builders.</span>
         </h1>
         <p className="lede rise d3">
           Cinematic executive mini-documentaries and long-form interviews with Africa’s CEOs, founders, and
@@ -33,16 +40,14 @@ export function Hero({ portrait, hasStories }: { portrait?: string; hasStories: 
             <PlayIcon />
             Watch Stories
           </a>
-          <a className="btn btn-solid" href="#feature">
+          <a className="btn btn-solid" href="#enquire">
             Book a Feature <span className="arrow">→</span>
           </a>
         </div>
         <a className="scroll-cue rise d5" href="#about">
           Scroll
+          <span className="scroll-line" aria-hidden="true" />
         </a>
-      </div>
-      <div className="hero-portrait rise d5">
-        <Portrait variant="hero" src={portrait} />
       </div>
     </section>
   );

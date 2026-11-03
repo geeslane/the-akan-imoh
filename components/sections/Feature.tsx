@@ -1,6 +1,6 @@
 "use client";
 
-import { type ChangeEvent, type FormEvent, useState } from "react";
+import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from "react";
 import { pathways, site } from "@/lib/site";
 import { ENQUIRY_INTENTS, type EnquiryIntent } from "@/lib/types";
 
@@ -15,6 +15,61 @@ const initial = {
   message: "",
   companyWebsite: "",
 };
+
+function IntentSelect({ value, onChange }: { value: EnquiryIntent; onChange: (value: EnquiryIntent) => void }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointer = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  return (
+    <div className={`intent${open ? " is-open" : ""}`} ref={rootRef}>
+      <button
+        type="button"
+        className="intent-trigger"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+      >
+        {value}
+      </button>
+      {open && (
+        <ul className="intent-menu" role="listbox" aria-label="Enquiry type">
+          {ENQUIRY_INTENTS.map((intent) => (
+            <li key={intent} role="presentation">
+              <button
+                type="button"
+                role="option"
+                aria-selected={value === intent}
+                className={value === intent ? "is-selected" : undefined}
+                onClick={() => {
+                  onChange(intent);
+                  setOpen(false);
+                }}
+              >
+                {intent}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export function Feature() {
   const [values, setValues] = useState(initial);
@@ -86,7 +141,7 @@ export function Feature() {
   };
 
   return (
-    <section className="feature" id="feature">
+    <section className="feature" id="feature" data-reveal>
       <p className="eyebrow">
         <span />
         Request a Feature
@@ -140,6 +195,7 @@ export function Feature() {
                 <input
                   tabIndex={-1}
                   autoComplete="off"
+                  aria-hidden="true"
                   value={values.companyWebsite}
                   onChange={set("companyWebsite")}
                 />
@@ -165,13 +221,10 @@ export function Feature() {
               </label>
               <label className="span-2">
                 <span>Enquiry</span>
-                <select value={values.intent} onChange={set("intent")}>
-                  {ENQUIRY_INTENTS.map((intent) => (
-                    <option key={intent} value={intent}>
-                      {intent}
-                    </option>
-                  ))}
-                </select>
+                <IntentSelect
+                  value={values.intent}
+                  onChange={(intent) => setValues((current) => ({ ...current, intent }))}
+                />
               </label>
               <label className="span-2">
                 <span>Note</span>
@@ -185,7 +238,7 @@ export function Feature() {
               </p>
             )}
 
-            <button className="btn btn-solid" type="submit" disabled={status === "sending"}>
+            <button className="btn btn-solid" type="submit" disabled={status === "sending"} aria-busy={status === "sending"}>
               {status === "sending" ? "Sending" : "Send the enquiry"} <span className="arrow">→</span>
             </button>
           </form>
