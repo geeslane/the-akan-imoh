@@ -20,7 +20,6 @@ export const nav = [
   { href: "#work", id: "work", label: "Work" },
   { href: "#stories", id: "stories", label: "Stories" },
   { href: "#writing", id: "writing", label: "Writing" },
-  { href: "#enquire", id: "feature", label: "Feature" },
 ] as const;
 
 export const practice = [

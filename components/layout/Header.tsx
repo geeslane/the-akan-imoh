@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { nav } from "@/lib/site";
 
 export function Header({ showStories = true }: { showStories?: boolean }) {
@@ -8,6 +8,25 @@ export function Header({ showStories = true }: { showStories?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    const viewport = window.visualViewport;
+    if (!header || !viewport) return;
+
+    const pin = () => {
+      header.style.top = `${viewport.offsetTop}px`;
+    };
+
+    pin();
+    viewport.addEventListener("resize", pin);
+    viewport.addEventListener("scroll", pin);
+    return () => {
+      viewport.removeEventListener("resize", pin);
+      viewport.removeEventListener("scroll", pin);
+    };
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -74,7 +93,7 @@ export function Header({ showStories = true }: { showStories?: boolean }) {
   }, [open]);
 
   return (
-    <header className={`header${scrolled ? " is-scrolled" : ""}`}>
+    <header ref={headerRef} className={`header${scrolled ? " is-scrolled" : ""}`}>
       <a className="logo" href="#top">
         Akan <em>Imoh</em>
       </a>

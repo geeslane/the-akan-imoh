@@ -12,7 +12,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: var(--header); }
+html { scroll-behavior: smooth; scroll-padding-top: var(--header); background: var(--bg); overflow-x: clip; }
 body {
   margin: 0;
   background: var(--bg);
@@ -22,7 +22,6 @@ body {
   line-height: 1.6;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  overflow-x: clip;
 }
 img { max-width: 100%; display: block; }
 button, input, textarea, select { font-family: inherit; }
@@ -125,9 +124,17 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
   transition: background 0.6s ease, border-color 0.6s ease;
 }
 .header.is-scrolled {
-  background: rgba(10, 10, 10, 0.92);
+  background: #0a0a0a;
   border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(12px);
+}
+.header.is-scrolled::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: 6rem;
+  background: #0a0a0a;
 }
 .nav-links { display: flex; gap: 1.35rem; }
 .nav-links a, .header-cta, .footer nav a {
@@ -195,7 +202,10 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
   background:
     linear-gradient(to top, rgba(10, 10, 10, 0.97) 0%, rgba(10, 10, 10, 0.88) 50%, rgba(10, 10, 10, 0.93) 100%);
 }
-.hero .photo-img { filter: grayscale(0.25) contrast(1.05) brightness(0.5); }
+.hero .photo-img {
+  filter: grayscale(0.25) contrast(1.05) brightness(0.5);
+  object-position: center 70%;
+}
 .hero-copy {
   position: relative;
   z-index: 1;
@@ -934,6 +944,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
 }
 
 @media (max-width: 767px) {
+  .hero .photo-img { object-position: center 78%; }
   .hero h1 { font-size: clamp(1.9rem, 8.4vw, 2.65rem); }
   .hero h1 > span { white-space: normal; }
   .about, .practice-grid, .stories-grid, .writing-grid, .pillars, .form-grid {
