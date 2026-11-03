@@ -121,13 +121,10 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
   align-items: center;
   min-height: var(--header);
   padding: 0 2rem;
-  transition: background 0.6s ease, border-color 0.6s ease;
-}
-.header.is-scrolled {
   background: #0a0a0a;
   border-bottom: 1px solid var(--line);
 }
-.header.is-scrolled::before {
+.header::before {
   content: "";
   position: absolute;
   right: 0;
@@ -792,10 +789,11 @@ select { cursor: pointer; }
 .intent-menu button:hover,
 .intent-menu button:focus-visible { background: rgba(212, 165, 90, 0.14); color: #f0ede8; }
 .intent-menu button.is-selected { color: var(--gold); }
-input:focus, textarea:focus, select:focus { outline: none; border-bottom-color: var(--gold); }
-input:focus-visible, textarea:focus-visible, select:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 3px;
+input:focus, textarea:focus, select:focus,
+input:focus-visible, textarea:focus-visible, select:focus-visible,
+.intent-trigger:focus, .intent-trigger:focus-visible {
+  outline: none;
+  border-bottom-color: var(--gold);
 }
 .form-error { margin: 1rem 0; color: var(--gold); font-size: 0.8125rem; }
 .enquire .btn { margin-top: 1.4rem; }
