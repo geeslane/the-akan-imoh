@@ -9,12 +9,12 @@ import { Practice } from "@/components/sections/Practice";
 import { Stories } from "@/components/sections/Stories";
 import { Course } from "@/components/sections/Course";
 import { Reveal } from "@/components/ui/Reveal";
-import { getStories } from "@/lib/sheets";
+import { getOthers, getStories } from "@/lib/sheets";
 
 export const revalidate = 3600;
 
 export default async function Page() {
-  const stories = await getStories();
+  const [stories, others] = await Promise.all([getStories(), getOthers()]);
 
   const hasStories = stories.length > 0;
 
@@ -24,10 +24,10 @@ export default async function Page() {
       <Header showStories={hasStories} />
       <main id="content">
         <Hero hasStories={hasStories} />
-        <About />
+        <About profileUrl={others.profileUrl} />
         <Practice />
         {hasStories && <Stories stories={stories} />}
-        <Course />
+        <Course videoId={others.courseVideoId} />
         <Manifesto />
         <Feature />
         <Newsletter />

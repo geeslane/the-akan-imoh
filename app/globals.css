@@ -948,7 +948,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible,
 .video-frame-short { aspect-ratio: 9 / 16; }
 .overlay-body:has(.video-frame-short) { width: min(22.5rem, 100%); }
 .video-frame-short .video-poster { object-fit: cover; object-position: center 18%; }
-.writing.course { padding-bottom: 8.5rem; }
+.writing.course { padding-bottom: 1.75rem; }
 .course-hero { max-width: 48rem; }
 .course-hero h2 {
   margin-top: 0.55rem;
@@ -991,6 +991,13 @@ input:focus-visible, textarea:focus-visible, select:focus-visible,
   align-items: start;
   margin-top: 4rem;
 }
+.writing.course.is-solo .course-hero,
+.course-split.is-solo {
+  width: min(100%, 64rem);
+  max-width: 64rem;
+  margin-inline: auto;
+}
+.course-split.is-solo { margin-top: 4rem; }
 .course-stage {
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: #141414;
@@ -1007,7 +1014,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible,
   text-transform: uppercase;
 }
 .course-video { margin: 0; }
-.course-outline { padding-bottom: 6rem; }
+.course-outline { padding-bottom: 0; }
 .course-outline ul {
   margin: 0;
   padding: 0;
@@ -1113,7 +1120,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible,
     grid-template-columns: 1fr;
   }
   .stories-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .writing.course { padding-bottom: 7rem; }
+  .writing.course { padding-bottom: 1.25rem; }
   .course-panel p { margin-left: 0; }
   .plates, .gallery-grid {
     display: flex;
@@ -1210,8 +1217,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible,
     padding-top: 4.5rem;
     padding-bottom: 4.5rem;
   }
-  .writing.course { padding-bottom: 8.5rem; }
-  .course-split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 4rem; }
+  .writing.course { padding-bottom: 1.75rem; }
+  .course-split:not(.is-solo) { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 4rem; }
   .course-stage { position: sticky; top: 8rem; }
 }
 

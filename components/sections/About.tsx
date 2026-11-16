@@ -1,9 +1,6 @@
 import { Photo } from "@/components/ui/Photo";
-import { getExecutiveProfileUrl } from "@/lib/sheets";
 
-export async function About() {
-  const profileUrl = await getExecutiveProfileUrl();
-
+export function About({ profileUrl }: { profileUrl: string }) {
   return (
     <section className="about" id="about" data-reveal>
       <div className="about-copy">
@@ -21,9 +18,11 @@ export async function About() {
         <p className="about-close">
           I don’t just interview leaders. I document the people and ideas shaping the Africa of tomorrow.
         </p>
-        <a className="btn btn-solid about-profile" href={profileUrl} target="_blank" rel="noreferrer">
-          Executive Profile <span className="arrow">→</span>
-        </a>
+        {profileUrl && (
+          <a className="btn btn-solid about-profile" href={profileUrl} target="_blank" rel="noreferrer">
+            Executive Profile <span className="arrow">→</span>
+          </a>
+        )}
       </div>
       <div className="about-media">
         <Photo

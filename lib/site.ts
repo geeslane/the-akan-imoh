@@ -41,6 +41,13 @@ export const practice = [
   },
 ] as const;
 
+export const pillars = [
+  "Preserve leadership stories in real time",
+  "Showcase African business excellence",
+  "Humanise the people building the continent",
+  "Build an archive that lasts",
+] as const;
+
 export const courseOutline = [
   {
     index: "01",

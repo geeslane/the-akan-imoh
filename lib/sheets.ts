@@ -1,7 +1,6 @@
 import "server-only";
 
 import { cleanText, parseCsv, parseCsvGrid, pick, slugify, youtubeIdFrom } from "@/lib/csv";
-import { site } from "@/lib/site";
 import type { GalleryItem, Story } from "@/lib/types";
 
 const SHEET_ID_PATTERN = /^[\w-]{20,}$/;
@@ -38,28 +37,22 @@ function httpUrl(value: string) {
   return match?.[0]?.replace(/[),.;]+$/, "") ?? "";
 }
 
-export async function getExecutiveProfileUrl() {
+export async function getOthers() {
+  const empty = { profileUrl: "", courseVideoId: "" };
   try {
-    const text = await readSheetText(process.env.GOOGLE_SHEET_PROFILE?.trim() || "Executive Profile");
-    if (!text) return site.linkedinUrl;
+    const text = await readSheetText(process.env.GOOGLE_SHEET_OTHERS?.trim() || "Others");
+    if (!text) return empty;
 
-    const grid = parseCsvGrid(text);
-    for (const row of grid) {
-      const labelIndex = row.findIndex((cell) => cleanText(cell).toLowerCase() === "executive profile");
-      const beside = labelIndex >= 0 ? httpUrl(row[labelIndex + 1] ?? "") : "";
-      if (beside) return beside;
+    const found = { ...empty };
+    for (const row of parseCsvGrid(text)) {
+      const label = cleanText(row[0] ?? "").toLowerCase();
+      const url = httpUrl(row[1] ?? "");
+      if (label === "executive profile") found.profileUrl = url;
+      if (label === "course overview") found.courseVideoId = youtubeIdFrom(url);
     }
-
-    for (const row of grid) {
-      for (const cell of row) {
-        const url = httpUrl(cell);
-        if (url) return url;
-      }
-    }
-
-    return site.linkedinUrl;
+    return found;
   } catch {
-    return site.linkedinUrl;
+    return empty;
   }
 }
 

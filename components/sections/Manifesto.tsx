@@ -1,3 +1,5 @@
+import { pillars } from "@/lib/site";
+
 export function Manifesto() {
   return (
     <section className="manifesto" id="why" aria-labelledby="why-title" data-reveal>
@@ -11,6 +13,14 @@ export function Manifesto() {
         I believe Africa’s stories, ideas and achievements should be shaped by its people, serve its people and
         command a place on the global stage.
       </p>
+      <div className="pillars">
+        {pillars.map((line, index) => (
+          <article key={line}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <p>{line}</p>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }
