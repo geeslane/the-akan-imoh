@@ -7,15 +7,14 @@ import { Manifesto } from "@/components/sections/Manifesto";
 import { Newsletter } from "@/components/sections/Newsletter";
 import { Practice } from "@/components/sections/Practice";
 import { Stories } from "@/components/sections/Stories";
-import { Writing } from "@/components/sections/Writing";
+import { Course } from "@/components/sections/Course";
 import { Reveal } from "@/components/ui/Reveal";
 import { getStories } from "@/lib/sheets";
-import { getEssays } from "@/lib/substack";
 
 export const revalidate = 3600;
 
 export default async function Page() {
-  const [stories, essays] = await Promise.all([getStories(), getEssays()]);
+  const stories = await getStories();
 
   const hasStories = stories.length > 0;
 
@@ -28,7 +27,7 @@ export default async function Page() {
         <About />
         <Practice />
         {hasStories && <Stories stories={stories} />}
-        <Writing essays={essays} />
+        <Course />
         <Manifesto />
         <Feature />
         <Newsletter />

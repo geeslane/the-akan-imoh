@@ -77,6 +77,16 @@ export function Feature() {
   const [error, setError] = useState("");
   const [method, setMethod] = useState("");
 
+  useEffect(() => {
+    const onIntent = (event: Event) => {
+      const intent = (event as CustomEvent<string>).detail;
+      if (!ENQUIRY_INTENTS.includes(intent as EnquiryIntent)) return;
+      setValues((current) => ({ ...current, intent: intent as EnquiryIntent }));
+    };
+    window.addEventListener("enquiry-intent", onIntent);
+    return () => window.removeEventListener("enquiry-intent", onIntent);
+  }, []);
+
   const set =
     (key: keyof typeof initial) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -149,8 +159,8 @@ export function Feature() {
       </p>
       <h2>If you are building something that matters, your story deserves to be told properly.</h2>
       <p className="feature-body">
-        This is not PR. This is not a podcast. This is a cinematic documentary record of how you built what you
-        built, told while you are still building it.
+        I work with exceptional founders, executives and organisations to document their stories, develop their
+        leaders and build narratives that endure.
       </p>
 
       <div className="pathways">
@@ -161,9 +171,6 @@ export function Feature() {
         ))}
       </div>
 
-      <a className="btn btn-solid feature-cta" href="#enquire" onClick={() => choose("Request a feature")}>
-        Request a Feature <span className="arrow">→</span>
-      </a>
       <p className="feature-note">Selected features only. Applications reviewed personally by Akan Imoh.</p>
 
       {site.bookingUrl && (
@@ -174,7 +181,8 @@ export function Feature() {
         </p>
       )}
 
-      <div className="enquire" id="enquire">
+      <div className="enquire" id="enroll">
+        <span id="enquire" />
         {status === "sent" ? (
           <div className="enquire-success">
             <h3>Received.</h3>

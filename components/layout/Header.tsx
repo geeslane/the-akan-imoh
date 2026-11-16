@@ -36,22 +36,25 @@ export function Header({ showStories = true }: { showStories?: boolean }) {
   }, []);
 
   useEffect(() => {
-    const sections = items
-      .map((item) => document.getElementById(item.id))
-      .filter((section): section is HTMLElement => Boolean(section));
+    const mark = () => {
+      const line = window.scrollY + 96;
+      let current = "";
+      for (const item of items) {
+        const section = document.getElementById(item.id);
+        if (section && section.offsetTop <= line) current = item.id;
+      }
+      setActive(current);
+    };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible?.target.id) setActive(visible.target.id);
-      },
-      { rootMargin: "-45% 0px -45% 0px", threshold: [0.1, 0.25, 0.5] },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    mark();
+    window.addEventListener("scroll", mark, { passive: true });
+    window.addEventListener("resize", mark);
+    window.addEventListener("hashchange", mark);
+    return () => {
+      window.removeEventListener("scroll", mark);
+      window.removeEventListener("resize", mark);
+      window.removeEventListener("hashchange", mark);
+    };
   }, [items]);
 
   useEffect(() => {
@@ -123,7 +126,12 @@ export function Header({ showStories = true }: { showStories?: boolean }) {
       {open && (
         <div className="menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu">
           {items.map((item) => (
-            <a key={item.id} href={item.href} onClick={() => setOpen(false)}>
+            <a
+              key={item.id}
+              href={item.href}
+              aria-current={active === item.id ? "true" : undefined}
+              onClick={() => setOpen(false)}
+            >
               {item.label}
             </a>
           ))}

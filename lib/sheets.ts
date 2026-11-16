@@ -1,6 +1,7 @@
 import "server-only";
 
-import { cleanText, parseCsv, pick, slugify, youtubeIdFrom } from "@/lib/csv";
+import { cleanText, parseCsv, parseCsvGrid, pick, slugify, youtubeIdFrom } from "@/lib/csv";
+import { site } from "@/lib/site";
 import type { GalleryItem, Story } from "@/lib/types";
 
 const SHEET_ID_PATTERN = /^[\w-]{20,}$/;
@@ -9,7 +10,7 @@ function sheetUrl(sheetId: string, sheetName: string) {
   return `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
 }
 
-async function readSheet(sheetName: string) {
+async function readSheetText(sheetName: string) {
   const sheetId = process.env.GOOGLE_SHEET_ID?.trim() ?? "";
   if (!SHEET_ID_PATTERN.test(sheetId)) return null;
 
@@ -23,7 +24,43 @@ async function readSheet(sheetName: string) {
   const text = await response.text();
   const trimmed = text.trim();
   if (!trimmed || trimmed.startsWith("<") || trimmed.startsWith("{")) return null;
+  return text;
+}
+
+async function readSheet(sheetName: string) {
+  const text = await readSheetText(sheetName);
+  if (!text) return null;
   return parseCsv(text);
+}
+
+function httpUrl(value: string) {
+  const match = cleanText(value).match(/https?:\/\/[^\s]+/i);
+  return match?.[0]?.replace(/[),.;]+$/, "") ?? "";
+}
+
+export async function getExecutiveProfileUrl() {
+  try {
+    const text = await readSheetText(process.env.GOOGLE_SHEET_PROFILE?.trim() || "Executive Profile");
+    if (!text) return site.linkedinUrl;
+
+    const grid = parseCsvGrid(text);
+    for (const row of grid) {
+      const labelIndex = row.findIndex((cell) => cleanText(cell).toLowerCase() === "executive profile");
+      const beside = labelIndex >= 0 ? httpUrl(row[labelIndex + 1] ?? "") : "";
+      if (beside) return beside;
+    }
+
+    for (const row of grid) {
+      for (const cell of row) {
+        const url = httpUrl(cell);
+        if (url) return url;
+      }
+    }
+
+    return site.linkedinUrl;
+  } catch {
+    return site.linkedinUrl;
+  }
 }
 
 function published(row: Record<string, string>) {
@@ -62,10 +99,23 @@ export async function getStories(): Promise<Story[]> {
 
     const drafts = rows.flatMap((row, index) => {
       if (!published(row)) return [];
-      const youtubeId = youtubeIdFrom(pick(row, "youtubeId", "youtube", "video", "url"));
+      const youtubeId = youtubeIdFrom(
+        pick(row, "shorts url", "shortsurl", "youtubeId", "youtube id", "youtube", "video", "url"),
+      );
       if (!youtubeId) return [];
-      return [{ row, index, youtubeId, title: pick(row, "title") }];
+      const order = Number(pick(row, "no.", "no", "number").replace(/[^\d.]/g, ""));
+      return [
+        {
+          row,
+          index,
+          order: Number.isFinite(order) ? order : index + 1,
+          youtubeId,
+          title: pick(row, "short title", "shorttitle", "title"),
+        },
+      ];
     });
+
+    drafts.sort((a, b) => a.order - b.order || a.index - b.index);
 
     const stories = await Promise.all(
       drafts.map(async ({ row, index, youtubeId, title }) => {
@@ -88,7 +138,7 @@ export async function getStories(): Promise<Story[]> {
       }),
     );
 
-    return stories.slice(0, 12);
+    return stories;
   } catch {
     return [];
   }

@@ -1,5 +1,3 @@
-import { pillars } from "@/lib/site";
-
 export function Manifesto() {
   return (
     <section className="manifesto" id="why" aria-labelledby="why-title" data-reveal>
@@ -7,17 +5,12 @@ export function Manifesto() {
         Why this matters
       </h2>
       <p className="manifesto-text">
-        The people building Africa <em>will not be young forever.</em>
+        In Africa, for Africa; <em>and for the global stage.</em>
       </p>
-      <p className="manifesto-close">Akan Imoh exists to make sure they are remembered.</p>
-      <div className="pillars">
-        {pillars.map((line, index) => (
-          <article key={line}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <p>{line}</p>
-          </article>
-        ))}
-      </div>
+      <p className="manifesto-body">
+        I believe Africa’s stories, ideas and achievements should be shaped by its people, serve its people and
+        command a place on the global stage.
+      </p>
     </section>
   );
 }

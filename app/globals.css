@@ -30,6 +30,7 @@ h1, h2, h3, p { margin: 0; }
 h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 500; letter-spacing: -0.011em; }
 .hero h1,
 .section-head h2,
+.course-hero h2,
 .about h2,
 .feature h2,
 .newsletter h2,
@@ -142,7 +143,7 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
 .nav-links a, .header-cta { font-size: 0.75rem; font-weight: 500; }
 .footer nav a { font-size: 0.68rem; }
 .header-cta { justify-self: end; color: var(--gold); }
-.nav-links a[aria-current="true"], .nav-links a:hover, .header-cta:hover { color: var(--gold); }
+.nav-links a[aria-current="true"], .nav-links a:hover, .menu a[aria-current="true"], .header-cta:hover { color: var(--gold); }
 .nav-toggle {
   position: relative;
   z-index: 50;
@@ -355,8 +356,15 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
 }
 .about-copy p { max-width: 65ch; color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
 .about-close { color: var(--text) !important; font-weight: 500; }
-.about-media { min-width: 0; }
-.about-media .photo-img { object-position: center top; }
+.about-profile { align-self: flex-start; width: fit-content; }
+.about-media { min-width: 0; width: 90%; justify-self: end; }
+.about-media .photo-img {
+  object-position: center 22%;
+  filter: grayscale(0.08) contrast(1.04) brightness(0.96);
+}
+.about-media .photo::after {
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.28), transparent 36%);
+}
 .about-media .photo:hover .photo-img,
 .about-media .photo:focus-within .photo-img { transform: none; }
 
@@ -380,10 +388,21 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
 }
 .section-head > p { max-width: 22rem; color: var(--muted); line-height: 1.65; text-align: right; }
 
-.practice-grid, .stories-grid, .gallery-grid, .plates, .writing-grid {
+.practice-lede {
+  max-width: 46rem;
+  margin: -1.2rem 0 2rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.practice-grid, .gallery-grid, .plates, .writing-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.8rem;
+}
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
 }
 .practice-card {
   min-height: 280px;
@@ -429,7 +448,7 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
 .story-media {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 9 / 16;
   flex: none;
   background: #000;
 }
@@ -441,7 +460,7 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
   object-fit: cover;
   transition: transform 600ms ease;
 }
-.story-media img { object-fit: contain; background: #000; }
+.story-media img { object-fit: cover; object-position: center 18%; background: #000; }
 .story:hover .story-media img,
 .story:focus-visible .story-media img,
 .gallery-tile:hover img,
@@ -475,10 +494,14 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
 }
 .story-copy {
   position: relative;
-  height: 10.25rem;
+  height: auto;
+  min-height: 7.25rem;
   overflow: hidden;
   flex: none;
 }
+.stories-grid .story-title { font-size: 0.95rem; }
+.stories-grid .story-hook { font-size: 0.78rem; }
+.stories-grid .play-badge { width: 2.35rem; height: 2.35rem; }
 .story-guest, .gallery-caption span {
   color: var(--gold);
   font-size: 0.75rem;
@@ -545,7 +568,33 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
   text-align: center;
 }
 .section-link { margin-top: 1.8rem; text-align: center; }
-.stories-more { margin-top: 0.75rem; }
+.stories-more {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.5rem;
+  margin-top: 1.5rem;
+}
+.stories-more a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--gold);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.stories-more-btn {
+  min-height: 44px;
+  border: 0;
+  background: none;
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
 .section-link a, .writing-grid a {
   color: var(--gold);
   font-size: 0.72rem;
@@ -614,7 +663,7 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
   scroll-margin-top: var(--header);
 }
 .manifesto-text {
-  max-width: 14em;
+  max-width: 18em;
   margin: 1.8rem auto 0;
   font-family: var(--font-quote), Georgia, "Times New Roman", serif;
   font-style: italic;
@@ -625,6 +674,13 @@ h1, h2, h3 { font-family: var(--font-body), "Helvetica Neue", Helvetica, Arial, 
   text-transform: none;
 }
 .manifesto-text em { color: var(--gold); font-style: italic; }
+.manifesto-body {
+  max-width: 40rem;
+  margin: 1.35rem auto 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
 .manifesto-close {
   max-width: 22em;
   margin: 0.85rem auto 0;
@@ -889,6 +945,110 @@ input:focus-visible, textarea:focus-visible, select:focus-visible,
   cursor: pointer;
 }
 .video-frame { position: relative; aspect-ratio: 16 / 9; background: #000; }
+.video-frame-short { aspect-ratio: 9 / 16; }
+.overlay-body:has(.video-frame-short) { width: min(22.5rem, 100%); }
+.video-frame-short .video-poster { object-fit: cover; object-position: center 18%; }
+.writing.course { padding-bottom: 8.5rem; }
+.course-hero { max-width: 48rem; }
+.course-hero h2 {
+  margin-top: 0.55rem;
+  font-size: clamp(2.8rem, 5.6vw, 5rem);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+.course-lede {
+  max-width: 48rem;
+  margin: 1.15rem 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.course-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.15rem 1.75rem;
+  margin-top: 2rem;
+}
+.course-actions .btn { font-weight: 600; }
+.course-actions .btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.course-syllabus {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-bottom: 1px solid transparent;
+}
+.course-syllabus:hover { color: var(--text); border-bottom-color: var(--gold); }
+.course-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+  margin-top: 4rem;
+}
+.course-stage {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #141414;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+.course-caption {
+  margin: 0;
+  padding: 0.85rem 1rem 0.75rem;
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.course-video { margin: 0; }
+.course-outline { padding-bottom: 6rem; }
+.course-outline ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+.course-outline li { border-bottom: 1px solid rgba(255, 255, 255, 0.15); }
+.course-outline h3 { margin: 0; font-size: inherit; font-weight: inherit; letter-spacing: inherit; }
+.course-toggle {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr) auto;
+  gap: 0.35rem 1rem;
+  align-items: center;
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 1.25rem 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.course-index { font-variant-numeric: tabular-nums; }
+.course-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.course-module-title { font-size: clamp(1.15rem, 1.7vw, 1.45rem); font-weight: 500; line-height: 1.2; }
+.course-chevron { color: var(--gold); font-size: 1.15rem; line-height: 1; }
+.course-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.course-panel.is-open { grid-template-rows: 1fr; }
+.course-panel > div { overflow: hidden; }
+.course-panel p {
+  max-width: 62ch;
+  margin: 0 0 1.2rem 4.25rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+#enroll,
+#enquire { scroll-margin-top: calc(var(--header) + 1rem); }
 .video-frame iframe,
 .video-poster {
   position: absolute;
@@ -937,17 +1097,24 @@ input:focus-visible, textarea:focus-visible, select:focus-visible,
 
 @media (max-width: 900px) {
   .about { grid-template-columns: 1fr; }
-  .about-media { order: -1; }
+  .about-media { order: -1; justify-self: center; }
   .about-media .photo { max-height: 78svh; }
+}
+
+@media (max-width: 1024px) {
+  .stories-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 @media (max-width: 767px) {
   .hero .photo-img { object-position: center 78%; }
   .hero h1 { font-size: clamp(1.9rem, 8.4vw, 2.65rem); }
   .hero h1 > span { white-space: normal; }
-  .about, .practice-grid, .stories-grid, .writing-grid, .pillars, .form-grid {
+  .about, .practice-grid, .writing-grid, .pillars, .form-grid {
     grid-template-columns: 1fr;
   }
+  .stories-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .writing.course { padding-bottom: 7rem; }
+  .course-panel p { margin-left: 0; }
   .plates, .gallery-grid {
     display: flex;
     gap: 0.8rem;
@@ -1043,6 +1210,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible,
     padding-top: 4.5rem;
     padding-bottom: 4.5rem;
   }
+  .writing.course { padding-bottom: 8.5rem; }
+  .course-split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 4rem; }
+  .course-stage { position: sticky; top: 8rem; }
 }
 
 @media (max-width: 767px) {

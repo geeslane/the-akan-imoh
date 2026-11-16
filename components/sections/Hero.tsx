@@ -20,15 +20,15 @@ export function Hero({ hasStories }: { hasStories: boolean }) {
       <div className="grain" aria-hidden="true" />
       <div className="hero-copy">
         <h1 className="rise d2">
-          <span>I Tell the Stories</span>
+          <span>Telling the Stories</span>
           <span>
             Behind <em>Africa’s</em> Most
           </span>
           <span>Powerful Builders.</span>
         </h1>
         <p className="lede rise d3">
-          Cinematic executive mini-documentaries and long-form interviews with Africa’s CEOs, founders, and
-          business leaders.
+          I go behind the scenes to document the people, ideas and decisions shaping Africa’s business, political
+          and cultural landscape.
         </p>
         <div className="hero-actions rise d4">
           <a

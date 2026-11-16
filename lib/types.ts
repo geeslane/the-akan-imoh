@@ -26,10 +26,8 @@ export type Essay = {
 
 export const ENQUIRY_INTENTS = [
   "Request a feature",
-  "Sponsorship",
-  "Advertising",
-  "Partnership",
-  "Book a conversation",
+  "Book a training session",
+  "Partner with me",
 ] as const;
 
 export type EnquiryIntent = (typeof ENQUIRY_INTENTS)[number];

@@ -10,8 +10,19 @@ type StoriesProps = {
   stories: Story[];
 };
 
+const PAGE_SIZE = 8;
+
 export function Stories({ stories }: StoriesProps) {
   const [active, setActive] = useState<Story | null>(null);
+  const [visible, setVisible] = useState(PAGE_SIZE);
+  const shown = stories.slice(0, visible);
+  const finished = visible >= stories.length;
+  const expanded = visible > PAGE_SIZE;
+
+  const collapse = () => {
+    setVisible(PAGE_SIZE);
+    document.getElementById("stories")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <section className="stories" id="stories" data-reveal>
@@ -21,21 +32,32 @@ export function Stories({ stories }: StoriesProps) {
             <span />
             Stories
           </p>
-          <h2>Featured Stories</h2>
+          <h2>Africa, through its Builders</h2>
         </div>
       </div>
 
       <div className="stories-grid">
-        {stories.map((story) => (
+        {shown.map((story) => (
           <StoryTile key={story.id} story={story} onOpen={() => setActive(story)} />
         ))}
       </div>
 
-      <p className="section-link stories-more">
-        <a href={site.youtubeUrl} target="_blank" rel="noreferrer">
-          Watch more on YouTube <span className="arrow">→</span>
-        </a>
-      </p>
+      <div className="stories-more">
+        {finished ? (
+          <a href={site.youtubeUrl} target="_blank" rel="noreferrer">
+            View more on YouTube <span className="arrow">→</span>
+          </a>
+        ) : (
+          <button type="button" className="stories-more-btn" onClick={() => setVisible((count) => count + PAGE_SIZE)}>
+            Load more
+          </button>
+        )}
+        {expanded && (
+          <button type="button" className="stories-more-btn" onClick={collapse}>
+            Show less
+          </button>
+        )}
+      </div>
 
       {active && (
         <Overlay label={active.title} onClose={() => setActive(null)}>
@@ -71,7 +93,7 @@ function VideoFrame({ story }: { story: Story }) {
   const poster = story.thumbnail || `https://i.ytimg.com/vi/${story.youtubeId}/hqdefault.jpg`;
 
   return (
-    <div className="video-frame">
+    <div className="video-frame video-frame-short">
       <img className="video-poster" src={poster} alt="" />
       {play && (
         <iframe

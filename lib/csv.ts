@@ -1,4 +1,4 @@
-export function parseCsv(input: string): Record<string, string>[] {
+export function parseCsvGrid(input: string): string[][] {
   const rows: string[][] = [];
   let row: string[] = [];
   let cell = "";
@@ -41,7 +41,11 @@ export function parseCsv(input: string): Record<string, string>[] {
     rows.push(row);
   }
 
-  const filled = rows.filter((entry) => entry.some((value) => value.trim().length > 0));
+  return rows.filter((entry) => entry.some((value) => value.trim().length > 0));
+}
+
+export function parseCsv(input: string): Record<string, string>[] {
+  const filled = parseCsvGrid(input);
   const header = filled[0];
   if (!header) return [];
 

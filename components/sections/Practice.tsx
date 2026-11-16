@@ -7,11 +7,15 @@ export function Practice() {
         <div>
           <p className="eyebrow eyebrow-left">
             <span />
-            Practice
+            Practice areas
           </p>
           <h2>What I Do</h2>
         </div>
       </div>
+      <p className="practice-lede">
+        The people I document work across different industries and spheres of influence. My interests sit at the
+        intersection of three broad areas.
+      </p>
       <div className="practice-grid">
         {practice.map((item) => (
           <article className="practice-card" key={item.index}>
