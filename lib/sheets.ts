@@ -14,7 +14,7 @@ async function readSheetText(sheetName: string) {
   if (!SHEET_ID_PATTERN.test(sheetId)) return null;
 
   const response = await fetch(sheetUrl(sheetId, sheetName), {
-    next: { revalidate: 3600 },
+    cache: "no-store",
     signal: AbortSignal.timeout(8000),
     headers: { "User-Agent": "AkanImohWebsite/1.0" },
   });
