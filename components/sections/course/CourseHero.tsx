@@ -26,7 +26,7 @@ export function CourseHero() {
           Apply <span className="arrow">→</span>
         </a>
         <a className="course-syllabus" href="#course-outline">
-          View syllabus
+          View courses
         </a>
       </div>
     </div>
